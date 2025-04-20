@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapNest</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">
+            <img src="images/logo.png" alt="SnapNest Logo" >
+        </a>
+        <button class="theme-toggle" onclick="toggleTheme()">🌗</button>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" onclick="goToAlbums(event)">
+        <div class="image-wrapper">
+            <img src="images/center_title1.png" alt="Main Icon" id="mainImage">
+            <img src="images/center_title2.png" alt="Symbol" id="symbolImage">
+        </div>
+        <p id="clickText">"Click anywhere to continue!"</p>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

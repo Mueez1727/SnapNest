@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnapNest - Albums</title>
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <link rel="stylesheet" href="css/albums.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+        <img src="images/logo.png" alt="SnapNest Logo" >
+    </a>
+    <button class="theme-toggle" onclick="toggleTheme()">🌗</button>
+</nav>
+
+<center><h1 class="albums-heading">My Albums</h1></center>
+
+<main>
+  <div class="sort-controls">
+    <label for="sort-albums">Sort by:</label>
+    <select id="sort-albums">
+      <option value="name">Name (A-Z)</option>
+      <option value="date">Creation Date (Newest First)</option>
+      <option value="activity">Latest Activity</option>
+    </select>
+  </div>
+  
+    <!-- Albums Grid -->
+    <div class="albums-container" id="albumsContainer">
+      <!-- Album cards will be dynamically injected here -->
+    </div>
+
+    <!-- Create Album (Centered, when no album exists) -->
+    <div class="create-album-center" id="createAlbumCentered">
+      <button id="createAlbumBtn" class="create-button">+ Create Album</button>
+    </div>
+
+  <div class="album-card add-new-album" id="addNewAlbum" style="display: none;">
+    <div class="album-thumbnail">
+      <span class="plus-icon">+ Add New Album</span>
+    </div>
+  </div>
+</main>
+
+  <!-- Album Template (JS will clone this) -->
+  <template id="albumTemplate">
+    <div class="album-card">
+      <div class="album-thumbnail">
+        <img src="assets/default-thumbnail.jpg" alt="Album Thumbnail">
+        <div class="menu-icon">
+          <span>⋮</span>
+          <div class="menu-options">
+            <button class="rename-btn">Rename</button>
+            <button class="delete-btn">Delete</button>
+          </div>
+        </div>
+      </div>
+      <div class="album-info">
+        <div class="album-name-date">
+          <span class="album-name">Album Name</span>
+          <span class="album-date">Apr 16, 2025</span>
+        </div>
+        <div class="media-counts">📷 0 | 🎥 0</div>
+      </div>
+    </div>
+  </template>
+
+  <div class="modal-content" id="createModal">
+    <div class="modal">
+      <h2>Create New Album</h2>
+      <input type="text" id="newAlbumName" placeholder="Enter album name..." />
+      <div class="modal-buttons">
+        <button class="create-btn" onclick="submitNewAlbum()">Create</button>
+        <button class="cancel-btn" onclick="closeModal('createModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rename Album Modal -->
+  <div class="modal-content" id="renameModal">
+    <div class="modal">
+      <h2>Rename Album</h2>
+      <input type="text" id="renameInput" placeholder="Enter new name..." />
+      <div class="modal-buttons">
+        <button class="rename-btn" onclick="submitRename()">Done</button>
+        <button class="cancel-btn" onclick="closeModal('renameModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Album Modal -->
+  <div class="modal-content" id="deleteModal">
+    <div class="modal">
+      <h2>Are you sure?</h2>
+      <div class="modal-buttons">
+        <button class="delete-btn" onclick="confirmDelete()">Yes</button>
+        <button class="cancel-btn" onclick="closeModal('deleteModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/albums.js"></script>
+</body>
+</html>
