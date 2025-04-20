@@ -52,6 +52,16 @@ function renderAlbums() {
     albums.forEach((album, index) => {
       const clone = albumTemplate.content.cloneNode(true);
       const albumCard = clone.querySelector(".album-card");
+      albumCard.addEventListener("click", () => {
+        const mediaCount = (album.photos || 0) + (album.videos || 0);
+        if (mediaCount === 0) {
+          selectedAlbumName = album.name;
+          document.getElementById("mediaUploader").click();
+        } else {
+          // In future: open album view
+          alert("Media viewer not implemented yet.");
+        }
+      });      
       albumCard.dataset.index = index;
 
       // Metadata for sorting
@@ -141,6 +151,41 @@ function submitNewAlbum() {
     });
   }
 }
+
+let selectedAlbumName = null;
+
+document.getElementById("mediaUploader").addEventListener("change", (e) => {
+  const files = e.target.files;
+  if (files.length === 0 || !selectedAlbumName) return;
+
+  const formData = new FormData();
+  formData.append("album", selectedAlbumName);
+  for (const file of files) {
+    formData.append("media[]", file);
+  }
+
+  fetch("upload_media.php", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("Media uploaded successfully!");
+      fetchAlbumsFromServer(); // Refresh albums
+    } else {
+      alert("Upload failed.");
+    }
+  })
+  .catch(err => {
+    console.error("Upload error:", err);
+    alert("Upload failed.");
+  });
+
+  // Reset uploader input
+  e.target.value = "";
+});
+
 
 // Rename album (local only)
 function submitRename() {
