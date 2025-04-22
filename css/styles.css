@@ -143,3 +143,18 @@ body.dark-theme .navbar {
         opacity: 1;
     }
 }
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .media-grid img,
+  .media-grid video {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  

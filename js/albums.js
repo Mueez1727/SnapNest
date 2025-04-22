@@ -58,10 +58,10 @@ function renderAlbums() {
           selectedAlbumName = album.name;
           document.getElementById("mediaUploader").click();
         } else {
-          // In future: open album view
-          alert("Media viewer not implemented yet.");
+          window.location.href = `album-detail.html?album=${encodeURIComponent(album.name)}`;
         }
-      });      
+      });
+            
       albumCard.dataset.index = index;
 
       // Metadata for sorting
