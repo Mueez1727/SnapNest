@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const albumName = params.get("album");
+  const urlParams = new URLSearchParams(window.location.search);
+  const albumName = urlParams.get("album");
+  document.getElementById("albumTitle").textContent = albumName;
+  
   
     if (!albumName) {
       document.getElementById("albumTitle").textContent = "Album Not Found";

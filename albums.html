@@ -6,6 +6,8 @@
   <title>SnapNest - Albums</title>
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="stylesheet" href="css/albums.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
   <nav class="navbar">
@@ -13,7 +15,7 @@
         <img src="images/logo.png" alt="SnapNest Logo" >
     </a>
     <button class="theme-toggle" onclick="toggleTheme()">🌗</button>
-</nav>
+ </nav>
 
 <center><h1 class="albums-heading">My Albums</h1></center>
 
@@ -67,7 +69,8 @@
     </div>
   </template>
 
-  <input type="file" id="mediaUploader" multiple accept="image/*,video/*" style="display: none;">
+  <input type="file" name="media[]" id="mediaUploader" multiple accept="image/*,video/*" style="display: none;">
+
 
   <div class="modal-content" id="createModal">
     <div class="modal">
@@ -80,17 +83,19 @@
     </div>
   </div>
 
-  <!-- Rename Album Modal -->
-  <div class="modal-content" id="renameModal">
-    <div class="modal">
-      <h2>Rename Album</h2>
-      <input type="text" id="renameInput" placeholder="Enter new name..." />
-      <div class="modal-buttons">
-        <button class="rename-btn" onclick="submitRename()">Done</button>
-        <button class="cancel-btn" onclick="closeModal('renameModal')">Cancel</button>
-      </div>
+  <!-- Rename Modal -->
+<div class="modal-content" id="renameModal">
+  <div class="modal">
+    <h2>Rename Album</h2>
+    <input type="text" id="renameInput" placeholder="Enter new name..." />
+    <div class="modal-buttons">
+      <button class="btn-primary" id="renameDoneBtn" onclick="submitRename()">Done</button>
+      <button class="btn-secondary" onclick="closeModal('renameModal')">Cancel</button>
     </div>
   </div>
+</div>
+
+  
 
   <!-- Delete Album Modal -->
   <div class="modal-content" id="deleteModal">

@@ -8,7 +8,14 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   fetchAlbumsFromServer(); // Load albums
+
+  // ✅ Attach rename button event
+  const renameBtn = document.getElementById("renameDoneBtn");
+  if (renameBtn) {
+    renameBtn.addEventListener("click", submitRename);
+  }
 });
+
 
 function fetchAlbumsFromServer() {
   fetch('get_albums.php')
@@ -77,10 +84,18 @@ function renderAlbums() {
       // 3-dot menu
       const menuIcon = clone.querySelector(".menu-icon span");
       const menuOptions = clone.querySelector(".menu-options");
-      menuIcon.addEventListener("click", (e) => {
-        e.stopPropagation();
+      const menuContainer = clone.querySelector(".menu-icon");
+      
+      menuContainer.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent album card click
         menuOptions.classList.toggle("show");
       });
+      
+      // Prevent options click from bubbling
+      menuOptions.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", (e) => e.stopPropagation());
+      });
+      
 
       // Rename button
       clone.querySelector(".rename-btn").addEventListener("click", () => {
@@ -141,16 +156,42 @@ function submitNewAlbum() {
         newAlbumNameInput.value = "";
         closeModal("createModal");
         fetchAlbumsFromServer(); // Refresh album list
+
+        // Show cute animated success popup
+        Swal.fire({
+          icon: 'success',
+          title: 'Album Created!',
+          showConfirmButton: false,
+          timer: 1500,
+          background: '#fefefe',
+          color: '#333',
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("https://sweetalert2.github.io/images/nyan-cat.gif")
+            left top
+            no-repeat
+          `
+        });
+
       } else {
-        alert(result.message || "Failed to create album.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: result.message || "Failed to create album."
+        });
       }
     })
     .catch(error => {
       console.error("Error creating album:", error);
-      alert("Error creating album.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: "Error creating album."
+      });
     });
   }
 }
+
 
 let selectedAlbumName = null;
 
@@ -171,7 +212,15 @@ document.getElementById("mediaUploader").addEventListener("change", (e) => {
   .then(res => res.json())
   .then(data => {
     if (data.success) {
-      alert("Media uploaded successfully!");
+      Swal.fire({
+        icon: 'success',
+        title: 'Media Uploaded!',
+        text: 'Your files have been added to the album.',
+        showConfirmButton: false,
+        timer: 2000,
+        background: '#fff',
+        backdrop: `rgba(0,0,0,0.3)`
+      });      
       fetchAlbumsFromServer(); // Refresh albums
     } else {
       alert("Upload failed.");
@@ -179,7 +228,6 @@ document.getElementById("mediaUploader").addEventListener("change", (e) => {
   })
   .catch(err => {
     console.error("Upload error:", err);
-    alert("Upload failed.");
   });
 
   // Reset uploader input
@@ -187,29 +235,36 @@ document.getElementById("mediaUploader").addEventListener("change", (e) => {
 });
 
 
-// Rename album (local only)
+// Rename album (server)
 function submitRename() {
-  const newName = renameInput.value.trim();
-  if (newName && selectedAlbumIndex !== null) {
+  const name = renameInput.value.trim();
+  if (name && selectedAlbumIndex !== null) {
     const oldName = albums[selectedAlbumIndex].name;
 
     fetch('rename_album.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `oldName=${encodeURIComponent(oldName)}&newName=${encodeURIComponent(newName)}`
+      body: `oldName=${encodeURIComponent(oldName)}&newName=${encodeURIComponent(name)}`
     })
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        albums[selectedAlbumIndex].name = newName;
+        Swal.fire('Renamed!', 'Album renamed successfully.', 'success');
+        fetchAlbumsFromServer();
         closeModal("renameModal");
-        fetchAlbumsFromServer(); // Refresh from server
       } else {
-        alert(data.message || 'Failed to rename album');
+        Swal.fire('Oops!', 'Rename failed.', 'error');
       }
+    })
+    .catch(err => {
+      console.error("Rename error:", err);
+      Swal.fire('Error!', 'Something went wrong.', 'error');
     });
+    console.log("Rename submitted:", renameInput.value);
+
   }
 }
+
 
 
 // Delete album (local only)
@@ -225,14 +280,16 @@ function confirmDelete() {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
+        Swal.fire('Deleted!', 'Album removed.', 'success');
+        fetchAlbumsFromServer();
         closeModal("deleteModal");
-        fetchAlbumsFromServer(); // Refresh from server
       } else {
-        alert(data.message || 'Failed to delete album');
+        Swal.fire('Error', 'Could not delete album.', 'error');
       }
     });
   }
 }
+
 
 
 // Toggle light/dark theme
@@ -264,3 +321,9 @@ sortSelect.addEventListener("change", () => sortAlbums(sortSelect.value));
 document.querySelectorAll(".menu-options").forEach(menu => {
   menu.addEventListener("click", (e) => e.stopPropagation());
 });
+
+// ✅ Add this line to hook up the rename Done button
+const renameBtn = document.getElementById("renameDoneBtn");
+if (renameBtn) {
+  renameBtn.addEventListener("click", submitRename);
+}

@@ -1,30 +1,18 @@
 <?php
-header('Content-Type: application/json');
-
-$albumsDir = 'albums/';
-$name = $_POST['name'] ?? '';
-
-if (!$name) {
-    echo json_encode(['success' => false, 'message' => 'Missing album name']);
-    exit;
-}
-
-$path = $albumsDir . $name;
+$albumName = $_POST['name'];
+$albumPath = __DIR__ . '/albums/' . $albumName;
 
 function deleteFolder($folderPath) {
-    foreach (scandir($folderPath) as $item) {
-        if ($item === '.' || $item === '..') continue;
-        $itemPath = $folderPath . DIRECTORY_SEPARATOR . $item;
-        is_dir($itemPath) ? deleteFolder($itemPath) : unlink($itemPath);
-    }
-    rmdir($folderPath);
+  foreach (glob($folderPath . '/*') as $file) {
+    is_dir($file) ? deleteFolder($file) : unlink($file);
+  }
+  return rmdir($folderPath);
 }
 
-if (!is_dir($path)) {
-    echo json_encode(['success' => false, 'message' => 'Album does not exist']);
-    exit;
+if (is_dir($albumPath)) {
+  deleteFolder($albumPath);
+  echo json_encode(['success' => true]);
+} else {
+  echo json_encode(['success' => false]);
 }
-
-deleteFolder($path);
-echo json_encode(['success' => true]);
 ?>
