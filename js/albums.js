@@ -260,8 +260,6 @@ function submitRename() {
       console.error("Rename error:", err);
       Swal.fire('Error!', 'Something went wrong.', 'error');
     });
-    console.log("Rename submitted:", renameInput.value);
-
   }
 }
 
