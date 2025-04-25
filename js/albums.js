@@ -9,18 +9,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
   fetchAlbumsFromServer(); // Load albums
 
-  // ✅ Attach rename button event
   const renameBtn = document.getElementById("renameDoneBtn");
-  if (renameBtn) {
-    renameBtn.addEventListener("click", submitRename);
-  }
+  const deleteBtn = document.getElementById("deleteDoneBtn");
+  const createAlbumBtn = document.getElementById("createAlbumBtn");
+  const addNewAlbumBox = document.getElementById("addNewAlbum");
+  const sortSelect = document.getElementById("sort-albums");
 
-  sortSelect.addEventListener('change', () => {
-    const selected = sortSelect.value;
-    sortAlbums(selected);
-  });  
+  if (renameBtn) renameBtn.addEventListener("click", submitRename);
+  if (deleteBtn) deleteBtn.addEventListener("click", confirmDelete);
+  if (createAlbumBtn) createAlbumBtn.addEventListener("click", () => showModal("createModal"));
+  if (addNewAlbumBox) addNewAlbumBox.addEventListener("click", () => showModal("createModal"));
+  if (sortSelect) sortSelect.addEventListener("change", () => sortAlbums(sortSelect.value));
 });
-
 
 function fetchAlbumsFromServer() {
   fetch('get_albums.php')
@@ -31,8 +31,6 @@ function fetchAlbumsFromServer() {
     })
     .catch(error => console.error("Error loading albums:", error));
 }
-
-document.getElementById("noAlbumsMsg").style.display = albums.length === 0 ? "block" : "none";
 
 // Album State
 let albums = [];
@@ -141,6 +139,11 @@ function sortAlbums(criteria) {
     } else if (criteria === "activity") {
       return new Date(b.latestActivity) - new Date(a.latestActivity);
     }
+  });
+
+  sortSelect.addEventListener('change', () => {
+    const selected = sortSelect.value;
+    sortAlbums(selected);
   });
 
   renderAlbums();
@@ -293,7 +296,7 @@ function submitRename() {
 
 // Delete album (server)
 function confirmDelete() {
-  if (selectedAlbumIndex === null) {
+  if (selectedAlbumIndex !== null) {
     const albumName = albums[selectedAlbumIndex].name;
 
     fetch('delete_album.php', {
@@ -339,7 +342,6 @@ document.addEventListener("click", () => {
 // Event Listeners
 createAlbumBtn.addEventListener("click", () => showModal("createModal"));
 addNewAlbumBox.addEventListener("click", () => showModal("createModal"));
-document.addEventListener("click", closeAllMenus);
 sortSelect.addEventListener("change", () => sortAlbums(sortSelect.value));
 
 // Prevent menu click from closing
