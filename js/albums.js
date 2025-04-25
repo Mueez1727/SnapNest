@@ -14,6 +14,11 @@ window.addEventListener('DOMContentLoaded', () => {
   if (renameBtn) {
     renameBtn.addEventListener("click", submitRename);
   }
+
+  sortSelect.addEventListener('change', () => {
+    const selected = sortSelect.value;
+    sortAlbums(selected);
+  });  
 });
 
 
@@ -26,6 +31,8 @@ function fetchAlbumsFromServer() {
     })
     .catch(error => console.error("Error loading albums:", error));
 }
+
+document.getElementById("noAlbumsMsg").style.display = albums.length === 0 ? "block" : "none";
 
 // Album State
 let albums = [];
@@ -46,6 +53,9 @@ const newAlbumNameInput = document.getElementById("newAlbumName");
 const renameInput = document.getElementById("renameInput");
 const sortSelect = document.getElementById("sort-albums");
 
+const mediaUploader = document.getElementById("mediaUploader");
+const noAlbumsMsg = document.getElementById("noAlbumsMsg");
+
 // Render all albums
 function renderAlbums() {
   albumsContainer.innerHTML = "";
@@ -53,8 +63,10 @@ function renderAlbums() {
   if (albums.length === 0) {
     createAlbumCentered.style.display = "flex";
     addNewAlbumBox.style.display = "none";
+    noAlbumsMsg.style.display = "block";
   } else {
     createAlbumCentered.style.display = "none";
+    noAlbumsMsg.style.display = "none";
 
     albums.forEach((album, index) => {
       const clone = albumTemplate.content.cloneNode(true);
@@ -80,7 +92,8 @@ function renderAlbums() {
       clone.querySelector(".album-name").textContent = album.name;
       clone.querySelector(".album-date").textContent = album.date || new Date(album.createdAt).toLocaleDateString();
       clone.querySelector(".media-counts").textContent = `📷 ${album.photos || 0} | 🎥 ${album.videos || 0}`;
-
+      const img = clone.querySelector(".album-thumbnail img");
+      img.src = album.thumbnail || 'assets/default-thumbnail.jpg';
       // 3-dot menu
       const menuIcon = clone.querySelector(".menu-icon span");
       const menuOptions = clone.querySelector(".menu-options");
@@ -237,37 +250,50 @@ document.getElementById("mediaUploader").addEventListener("change", (e) => {
 
 // Rename album (server)
 function submitRename() {
-  const name = renameInput.value.trim();
-  if (name && selectedAlbumIndex !== null) {
-    const oldName = albums[selectedAlbumIndex].name;
+  const newName = renameInput.value.trim();
+  if (!newName || selectedAlbumIndex === null) return;
 
-    fetch('rename_album.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `oldName=${encodeURIComponent(oldName)}&newName=${encodeURIComponent(name)}`
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        Swal.fire('Renamed!', 'Album renamed successfully.', 'success');
-        fetchAlbumsFromServer();
-        closeModal("renameModal");
-      } else {
-        Swal.fire('Oops!', 'Rename failed.', 'error');
-      }
-    })
-    .catch(err => {
-      console.error("Rename error:", err);
-      Swal.fire('Error!', 'Something went wrong.', 'error');
+  const oldName = albums[selectedAlbumIndex].name;
+
+  fetch('rename_album.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ oldName, newName })
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.success) {
+      closeModal("renameModal");
+      fetchAlbumsFromServer(); // Refresh album list
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Album Renamed!',
+        text: `"${oldName}" is now "${newName}"`,
+        showConfirmButton: false,
+        timer: 1800
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Rename Failed',
+        text: result.message || "Could not rename album."
+      });
+    }
+  })
+  .catch(error => {
+    console.error("Rename error:", error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error!',
+      text: "Something went wrong while renaming the album."
     });
-  }
+  });
 }
 
-
-
-// Delete album (local only)
+// Delete album (server)
 function confirmDelete() {
-  if (selectedAlbumIndex !== null) {
+  if (selectedAlbumIndex === null) {
     const albumName = albums[selectedAlbumIndex].name;
 
     fetch('delete_album.php', {
@@ -303,11 +329,12 @@ function toggleTheme() {
 }
 
 // Close all 3-dot menus
-function closeAllMenus() {
-  document.querySelectorAll(".menu-options").forEach(menu => {
+document.addEventListener("click", () => {
+  document.querySelectorAll(".menu-options.show").forEach(menu => {
     menu.classList.remove("show");
   });
-}
+});
+
 
 // Event Listeners
 createAlbumBtn.addEventListener("click", () => showModal("createModal"));
