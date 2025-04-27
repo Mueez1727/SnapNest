@@ -1,19 +1,14 @@
-// js/theme.js
+// theme.js
+
 function toggleTheme() {
-    const body = document.body;
-    const currentTheme = body.classList.contains("dark-theme") ? "dark" : "light";
-    const newTheme = currentTheme === "dark" ? "light" : "dark";
-    
-    body.classList.remove(`${currentTheme}-theme`);
-    body.classList.add(`${newTheme}-theme`);
-  
-    // Save preference
-    localStorage.setItem("theme", newTheme);
-  }
-  
-  // On page load
-  window.onload = () => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    document.body.classList.add(`${savedTheme}-theme`);
-  };
-  
+  const isDark = document.documentElement.classList.toggle('dark-theme');
+  document.documentElement.classList.toggle('light-theme', !isDark);
+
+  fetch('php/theme_setting.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ theme: isDark ? 'dark' : 'light' })
+  });
+}
