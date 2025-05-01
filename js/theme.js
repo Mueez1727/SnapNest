@@ -36,6 +36,7 @@ function toggleTheme() {
     },
     body: JSON.stringify({ theme: selectedTheme })
   });
+  updateThemeIcon(selectedTheme); 
 }
 
 function applyTheme(theme) {
@@ -45,5 +46,13 @@ function applyTheme(theme) {
   } else {
     document.documentElement.classList.add('light-theme');
     document.documentElement.classList.remove('dark-theme');
+  }
+  updateThemeIcon(theme); // <-- Add this line
+}
+
+function updateThemeIcon(theme) {
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  if (themeToggleBtn) {
+    themeToggleBtn.textContent = theme === 'dark' ? '🌞' : '🌙';
   }
 }
