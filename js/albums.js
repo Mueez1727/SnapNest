@@ -1,9 +1,27 @@
 // albums.js
+document.addEventListener("DOMContentLoaded", () => {
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  
+  if (themeToggleBtn) {
+      themeToggleBtn.addEventListener("click", () => {
+          document.body.classList.toggle("dark-theme");
 
-document.addEventListener('DOMContentLoaded', function () {
-    loadAlbums();
-    loadTheme(); // Load theme when page loads
-  });
+          // Save theme preference
+          const theme = document.body.classList.contains("dark-theme") ? "dark" : "light";
+          localStorage.setItem("theme", theme);
+      });
+  } else {
+      console.warn("Theme toggle button not found!");
+  }
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+      document.body.classList.add("dark-theme");
+  }
+  loadAlbums();
+});
+
   
   const albumsContainer = document.getElementById('albumsContainer');
   const createAlbumBtn = document.getElementById('createAlbumBtn');
@@ -140,20 +158,5 @@ document.addEventListener('DOMContentLoaded', function () {
   function closeModal(id) {
     document.getElementById(id).style.display = 'none';
   }
-  
-  // Load theme from server
-  function loadTheme() {
-    fetch('php/theme_setting.php')
-      .then(response => response.json())
-      .then(data => {
-        if (data.theme === 'dark') {
-          document.documentElement.classList.remove('light-theme');
-          document.documentElement.classList.add('dark-theme');
-        } else {
-          document.documentElement.classList.remove('dark-theme');
-          document.documentElement.classList.add('light-theme');
-        }
-      })
-      .catch(error => console.error('Error loading theme:', error));
-  }
+
   

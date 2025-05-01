@@ -42,7 +42,6 @@ body.dark-theme {
     align-items: center;
     padding: 12px 24px;
     background: var(--navbar-bg);
-    background-color: var(--navbar-bg);
     border-color: var(--border-color);
     border-bottom: 1px solid #ccc;
     transition: background 0.3s;
@@ -63,7 +62,7 @@ body.dark-theme .navbar {
     transform: scale(1.1);
 }
 
-.theme-toggle{
+.navbar .theme-toggle{
     font-size: 20px;
     padding: 5px 10px;
     cursor: pointer;
