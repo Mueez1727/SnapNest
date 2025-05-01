@@ -1,8 +1,11 @@
 // theme.js
 // Load the theme on page load
 document.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  applyTheme(savedTheme);
+  const savedTheme = localStorage.getItem('theme');
+
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  }
 
   // Find the theme toggle button
   const themeToggleBtn = document.getElementById('theme-toggle');
