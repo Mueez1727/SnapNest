@@ -1,14 +1,22 @@
 // theme.js
-
 // Load the theme on page load
 document.addEventListener('DOMContentLoaded', () => {
-  // OPTIONAL: Replace this with a fetch call to your PHP script if it returns saved theme
   const savedTheme = localStorage.getItem('theme') || 'light';
   applyTheme(savedTheme);
+
+  // Find the theme toggle button
+  const themeToggleBtn = document.getElementById('theme-toggle');
+
+  if (!themeToggleBtn) {
+    console.warn('Theme toggle button not found!');
+    return;
+  }
+
+  // Attach the click event listener
+  themeToggleBtn.addEventListener('click', toggleTheme);
 });
 
 function toggleTheme() {
-  console.log('button is pressed!');
   const isDark = document.documentElement.classList.toggle('dark-theme');
   document.documentElement.classList.toggle('light-theme', !isDark);
 

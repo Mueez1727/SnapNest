@@ -11,7 +11,7 @@ body {
     transition: background 0.3s, color 0.3s;
 }
 
-body.light-theme {
+html.light-theme {
   --bg-color: #f7f7f7;
   --text-color: #333;
   --navbar-bg: #eaeaea;
@@ -23,7 +23,7 @@ body.light-theme {
   --popup-text: #333;
 }
 
-body.dark-theme {
+html.dark-theme {
   --bg-color: #1e1e1e;
   --text-color: #f7f7f7;
   --navbar-bg: #000000;
