@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-            closeCreateAlbumPopup();
+          closeModal('createModal');
             loadAlbums();  // reload albums
         } else {
           Swal.fire('Album already exists!');
