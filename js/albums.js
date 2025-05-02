@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Submit new album
   function submitNewAlbum() {
-    const albumNameInput = document.getElementById('albumName');
+    const albumNameInput = document.getElementById('newAlbumName');
     const albumName = albumNameInput.value.trim();
     if (!albumName) {
       Swal.fire('Please enter album name');
