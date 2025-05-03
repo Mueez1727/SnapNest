@@ -83,16 +83,81 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="media-counts">📷 ${album.photoCount} | 🎥 ${album.videoCount}</div>
       </div>
+      <div class="album-menu">
+        <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
+        <div class="menu-options" style="display: none;">
+          <button onclick="renameAlbum('${album.name}')">Rename</button>
+          <button onclick="deleteAlbum('${album.name}')">Delete</button>
+        </div>
+      </div>
     `;
   
-    // When clicked → upload media
-    card.addEventListener('click', function () {
-      selectedAlbum = album.name;
-      mediaUploader.click();
+    // Clicking the card opens file selector
+    card.addEventListener('click', function (e) {
+      if (!e.target.closest('.album-menu')) {
+        selectedAlbum = album.name;
+        mediaUploader.click();
+      }
     });
   
     return card;
   }
+  
+  // Toggle 3-dot menu
+function toggleMenu(button) {
+  const menu = button.nextElementSibling;
+  const allMenus = document.querySelectorAll('.menu-options');
+  allMenus.forEach(m => {
+    if (m !== menu) m.style.display = 'none';
+  });
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Rename album
+function renameAlbum(oldName) {
+  const newName = prompt("Enter new album name:", oldName);
+  if (!newName || newName.trim() === oldName) return;
+
+  fetch('php/rename_album.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ oldName, newName: newName.trim() })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        loadAlbums();
+      } else {
+        Swal.fire('Rename failed: ' + data.message);
+      }
+    })
+    .catch(err => console.error('Rename error:', err));
+}
+
+// Delete album
+function deleteAlbum(name) {
+  if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+
+  fetch('php/delete_album.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        loadAlbums();
+      } else {
+        Swal.fire('Delete failed: ' + data.message);
+      }
+    })
+    .catch(err => console.error('Delete error:', err));
+}
+
   
   // Open create album modal
   function openCreateModal() {

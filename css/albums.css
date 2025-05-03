@@ -319,35 +319,42 @@ body.dark-theme .navbar {
     display: none;
   }
   
-  .popup-box {
+  .popup-box,
+  .modal {
     background-color: var(--popup-bg);
     color: var(--popup-text);
     padding: 30px;
-    border-radius: 10px;
+    border-radius: 12px;
     min-width: 300px;
+    max-width: 400px;
+    width: 90%;
     text-align: center;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
   }
   
-  .popup-box input {
-    width: 100%;
-    padding: 10px;
-    margin: 15px 0;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-  }
+  .popup-box input,
+  .modal-content input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 16px;
+}
+
   
-  .popup-box .popup-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .popup-box button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.popup-box .popup-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-box button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
   
   .popup-box .btn-primary {
     background-color: var(--button-bg);
@@ -376,58 +383,29 @@ body.dark-theme .navbar {
   justify-content: center;
   z-index: 1000;
 }
-
-/* Inner modal box */
-.modal {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-/* Modal buttons */
-.modal-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
   
-  .modal-content.show {
+.modal-content.show {
     display: flex;
-  }
+}
   
   /* Close Button */
-.modal .close {
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  font-size: 24px;
-  color: #aaa;
-  cursor: pointer;
-}
-
-.modal .close:hover {
-  color: #333;
-}
+  .modal-content .close {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 24px;
+    color: #aaa;
+    cursor: pointer;
+  }
+  
+  .modal-content .close:hover {
+    color: #333;
+  }
 
   .modal-content h2 {
     margin-bottom: 1rem;
     font-size: 1.5rem;
     color: #000000;
-  }
-  
-  .modal-content input[type="text"] {
-    width: 100%;
-    padding: 10px 12px;
-    margin-top: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
   }
   
   .modal-content button {
