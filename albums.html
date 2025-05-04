@@ -78,43 +78,55 @@
 
   <input type="file" name="media[]" id="mediaUploader" multiple accept="image/*,video/*" style="display: none;">
 
-    <!--Create album modal-->
-  <div class="modal-content" id="createModal" style="display: none;">
-    <div class="modal">
-      <h2>Create New Album</h2>
-      <input type="text" id="newAlbumName" placeholder="Enter album name..." />
-      <div class="modal-buttons">
-        <button class="create-btn" onclick="submitNewAlbum()">Create</button>
-        <button class="cancel-btn" onclick="closeModal('createModal')">Cancel</button>
-      </div>
-    </div>
-  </div>
+    <!-- Reusable Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" style="display: none;"></div>
 
-  <!-- Rename Modal -->
+    <!-- Reusable Modal Overlay -->
+<div class="modal-overlay" id="modalOverlay" style="display: none;"></div>
+
+<!-- Create Album Modal -->
+<div class="modal-content" id="createModal" style="display: none;">
+  <div class="modal animated-modal">
+    <h2>Create New Album</h2>
+    <input type="text" id="albumNameInput" placeholder="Enter album name..." />
+    <div class="modal-buttons">
+      <button class="btn-primary" id="createAlbumBtn" onclick="submitCreate()">Create</button>
+      <button class="btn-secondary" onclick="closeModal('createModal')">Cancel</button>
+    </div>
+    <div class="spinner" id="createSpinner" style="display: none;"></div>
+  </div>
+</div>
+
+<!-- Rename Album Modal -->
 <div class="modal-content" id="renameModal" style="display: none;">
-  <div class="modal">
+  <div class="modal animated-modal">
     <h2>Rename Album</h2>
     <input type="text" id="renameInput" placeholder="Enter new name..." />
     <div class="modal-buttons">
       <button class="btn-primary" id="renameDoneBtn" onclick="submitRename()">Done</button>
       <button class="btn-secondary" onclick="closeModal('renameModal')">Cancel</button>
     </div>
+    <div class="spinner" id="renameSpinner" style="display: none;"></div>
   </div>
 </div>
 
-  
-
-  <!-- Delete Album Modal -->
-  <div class="modal-content" id="deleteModal" style="display: none;">
-    <div class="modal">
-      <h2>Are you sure?</h2>
-      <div class="modal-buttons">
-        <button class="delete-btn" onclick="confirmDelete()">Yes</button>
-        <button class="cancel-btn" onclick="closeModal('deleteModal')">Cancel</button>
-      </div>
+<!-- Delete Album Modal -->
+<div class="modal-content" id="deleteModal" style="display: none;">
+  <div class="modal animated-modal">
+    <h2>Are you sure?</h2>
+    <div class="modal-buttons">
+      <button class="btn-primary" onclick="confirmDelete()">Yes</button>
+      <button class="btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
     </div>
+    <div class="spinner" id="deleteSpinner" style="display: none;"></div>
   </div>
+</div>
 
+
+  <div id="loadingSpinner">
+    <div class="spinner"></div>
+  </div>
+  
   <script src="js/theme.js"></script>
   <script src="js/albums.js"></script>
 </body>
