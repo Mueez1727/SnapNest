@@ -1,26 +1,14 @@
 [
     {
         "name": "a",
-        "creationDate": "May 02, 2025",
-        "photoCount": 1,
-        "videoCount": 0
+        "photos": 1,
+        "videos": 0,
+        "latestActivity": "2025-05-02 20:19:08"
     },
     {
-        "name": "b",
-        "creationDate": "May 02, 2025",
-        "photoCount": 0,
-        "videoCount": 0
-    },
-    {
-        "name": "c",
-        "creationDate": "May 03, 2025",
-        "photoCount": 0,
-        "videoCount": 0
-    },
-    {
-        "name": "av",
-        "creationDate": "May 03, 2025",
-        "photoCount": 0,
-        "videoCount": 0
+        "name": "aaaa",
+        "photos": 0,
+        "videos": 0,
+        "latestActivity": null
     }
 ]
