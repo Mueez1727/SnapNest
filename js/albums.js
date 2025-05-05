@@ -64,6 +64,17 @@ function renderAlbums() {
   albumsContainer.appendChild(addNewAlbum);
 }
 
+function formatDate(datetimeString) {
+  const date = new Date(datetimeString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
 function createAlbumCard(album) {
   const card = document.createElement("div");
   card.className = "album-card";
@@ -74,9 +85,9 @@ function createAlbumCard(album) {
     <div class="album-info">
       <div class="album-name-date">
         <span class="album-name">${album.name}</span>
-        <span class="album-date">${album.creationDate}</span>
+        <span class="album-date">${album.latestActivity ? formatDate(album.latestActivity) : 'No activity yet'}</span>
       </div>
-      <div class="media-counts">📷 ${album.photoCount} | 🎥 ${album.videoCount}</div>
+      <div class="media-counts">📷 ${album.photos || 0} | 🎥 ${album.videos || 0}</div>
     </div>
     <div class="album-menu">
       <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>

@@ -1,51 +1,43 @@
 <?php
-// php/save_album.php
+// Read and decode input JSON
+$input = json_decode(file_get_contents("php://input"), true);
+$name = trim($input['name']);
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+$albumsFile = '../data/albums.json';
+$albumsFolder = '../albums/';
 
-header('Content-Type: application/json');
-
-$data = json_decode(file_get_contents('php://input'), true);
-
-if (!isset($data['name']) || empty(trim($data['name']))) {
+if (!$name) {
     echo json_encode(['success' => false, 'message' => 'Invalid album name']);
     exit;
 }
 
-$albumName = trim($data['name']);
-$albumsFile = '../data/albums.json';
-
 // Load existing albums
-$albums = [];
-if (file_exists($albumsFile)) {
-    $albums = json_decode(file_get_contents($albumsFile), true);
-}
+$albums = file_exists($albumsFile) ? json_decode(file_get_contents($albumsFile), true) : [];
 
-// Check if album already exists
+// Check for duplicate album name
 foreach ($albums as $album) {
-    if (strtolower($album['name']) === strtolower($albumName)) {
+    if (strtolower($album['name']) === strtolower($name)) {
         echo json_encode(['success' => false, 'message' => 'Album already exists']);
         exit;
     }
 }
 
-// Add new album
-$albums[] = [
-    'name' => $albumName,
-    'creationDate' => date('M d, Y'),
+// Create new album entry
+$newAlbum = [
+    'name' => $name,
+    'creationDate' => date('Y-m-d'),
     'photoCount' => 0,
     'videoCount' => 0
 ];
 
-// Save albums
+// Append and save
+$albums[] = $newAlbum;
 file_put_contents($albumsFile, json_encode($albums, JSON_PRETTY_PRINT));
 
-// Create album folder
-$albumFolder = "../uploads/" . preg_replace('/[^a-zA-Z0-9-_]/', '_', $albumName);
-if (!file_exists($albumFolder)) {
-    mkdir($albumFolder, 0777, true);
+// Create album folder if it doesn't exist
+$albumPath = $albumsFolder . $name;
+if (!is_dir($albumPath)) {
+    mkdir($albumPath, 0777, true);
 }
 
 echo json_encode(['success' => true]);
