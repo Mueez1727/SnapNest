@@ -1,31 +1,35 @@
 <?php
-$data = json_decode(file_get_contents("php://input"), true);
+header('Content-Type: application/json');
 
-$albumName = $data['name'];
-$albumPath = './albums/' . $albumName;
+$data = json_decode(file_get_contents('php://input'), true);
 
-$response = ['success' => false, 'message' => ''];
-
-function deleteFolder($folder) {
-    foreach (glob($folder . '/*') as $file) {
-        if (is_dir($file)) {
-            deleteFolder($file);
-        } else {
-            unlink($file);
-        }
-    }
-    return rmdir($folder);
-}
+$albumName = trim($data['name']);
+$albumPath = '../albums/' . $albumName;
 
 if (!is_dir($albumPath)) {
-    $response['message'] = 'Album does not exist';
-} else {
-    if (deleteFolder($albumPath)) {
-        $response['success'] = true;
-    } else {
-        $response['message'] = 'Failed to delete album';
+    echo json_encode(['success' => false, 'message' => 'Album not found']);
+    exit;
+}
+
+// Delete all files inside the album
+$files = glob($albumPath . '/*');
+foreach ($files as $file) {
+    if (is_file($file)) {
+        unlink($file);
     }
 }
 
-header('Content-Type: application/json');
-echo json_encode($response);
+// Delete the album folder
+if (rmdir($albumPath)) {
+    // Optional: Update albums.json if you're maintaining a list
+    $jsonPath = '../data/albums.json';
+    if (file_exists($jsonPath)) {
+        $albums = json_decode(file_get_contents($jsonPath), true);
+        $albums = array_filter($albums, fn($album) => $album['name'] !== $albumName);
+        file_put_contents($jsonPath, json_encode(array_values($albums), JSON_PRETTY_PRINT));
+    }
+
+    echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Failed to delete album']);
+}
