@@ -3,12 +3,14 @@
         "name": "aaaaa",
         "photos": 1,
         "videos": 0,
-        "latestActivity": "2025-05-02 20:19:08"
+        "latestActivity": "2025-05-07",
+        "photoCount": 2,
+        "videoCount": 0
     },
     {
-        "name": "a",
+        "name": "m",
         "creationDate": "2025-05-07",
-        "photoCount": 2,
+        "photoCount": 1,
         "videoCount": 0,
         "latestActivity": "2025-05-07"
     }
