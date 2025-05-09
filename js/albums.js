@@ -81,6 +81,13 @@ function createAlbumCard(album) {
   card.innerHTML = `
     <div class="album-thumbnail">
       <img src="assets/default-thumbnail.jpg" alt="Album Thumbnail">
+      <div class="album-menu">
+        <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
+        <div class="menu-options" style="display: none;">
+          <button onclick="openRenameModal('${album.name}')">Rename</button>
+          <button onclick="openDeleteModal('${album.name}')">Delete</button>
+        </div>
+      </div>
     </div>
     <div class="album-info">
       <div class="album-name-date">
@@ -88,13 +95,6 @@ function createAlbumCard(album) {
         <span class="album-date">${album.latestActivity ? formatDate(album.latestActivity) : 'No activity yet'}</span>
       </div>
       <div class="media-counts">📷 ${album.photos || 0} | 🎥 ${album.videos || 0}</div>
-    </div>
-    <div class="album-menu">
-      <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
-      <div class="menu-options" style="display: none;">
-        <button onclick="openRenameModal('${album.name}')">Rename</button>
-        <button onclick="openDeleteModal('${album.name}')">Delete</button>
-      </div>
     </div>
   `;
 
@@ -107,6 +107,7 @@ function createAlbumCard(album) {
 
   return card;
 }
+
 
 function toggleMenu(button) {
   const menu = button.nextElementSibling;
