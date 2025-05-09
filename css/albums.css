@@ -188,6 +188,7 @@ body.dark-theme .navbar {
     align-items: center;
     justify-content: center;
     position: relative;
+    overflow: hidden;
   }
   
   .album-thumbnail img {
@@ -258,6 +259,8 @@ body.dark-theme .navbar {
     position: absolute;
     top: 8px;
     right: 8px;
+    cursor:pointer; 
+    z-index: 2;
   }
   
   .menu-icon span {
@@ -267,15 +270,19 @@ body.dark-theme .navbar {
   
   .menu-options {
     position: absolute;
-    top: 25px;
+    top: 20px;
     right: 0;
     background-color: var(--card-bg);
     color: var(--text-color);
+    border: 1px solid #ddd;
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: none;
-    flex-direction: column;
-    z-index: 1;
+    z-index: 5;
+  }
+  
+  .menu-icon:hover .menu-options {
+    display: block;
   }
   
   .menu-options.show {
