@@ -81,6 +81,7 @@ function createAlbumCard(album) {
   card.innerHTML = `
     <div class="album-thumbnail">
       <img src="assets/default-thumbnail.jpg" alt="Album Thumbnail">
+      
       <div class="album-menu">
         <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
         <div class="menu-options" style="display: none;">
@@ -88,14 +89,14 @@ function createAlbumCard(album) {
           <button onclick="openDeleteModal('${album.name}')">Delete</button>
         </div>
       </div>
-    </div>
-    <div class="album-info">
-      <div class="album-name-date">
+      
+      <div class="album-footer">
         <span class="album-name">${album.name}</span>
         <span class="album-date">${album.latestActivity ? formatDate(album.latestActivity) : 'No activity yet'}</span>
       </div>
-      <div class="media-counts">📷 ${album.photos || 0} | 🎥 ${album.videos || 0}</div>
     </div>
+
+    <div class="media-counts">📷 ${album.photos || 0} | 🎥 ${album.videos || 0}</div>
   `;
 
   card.addEventListener("click", function (e) {
@@ -107,7 +108,6 @@ function createAlbumCard(album) {
 
   return card;
 }
-
 
 function toggleMenu(button) {
   const menu = button.nextElementSibling;
