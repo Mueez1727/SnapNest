@@ -6,5 +6,11 @@
         "latestActivity": "2025-05-09",
         "photoCount": 3,
         "videoCount": 0
+    },
+    {
+        "name": "abc",
+        "creationDate": "2025-05-13",
+        "photoCount": 0,
+        "videoCount": 0
     }
 ]
