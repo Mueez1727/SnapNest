@@ -99,14 +99,20 @@ function createAlbumCard(album) {
     <div class="media-counts">📷 ${album.photos || 0} | 🎥 ${album.videos || 0}</div>
   `;
 
-  card.addEventListener("click", function (e) {
-    if (!e.target.closest(".album-menu")) {
-      selectedAlbum = album.name;
+card.addEventListener("click", function (e) {
+  console.log('Rendering album:', album.name, 'Photos:', album.photos, 'Videos:', album.videos);
+  if (!e.target.closest(".album-menu")) {
+    selectedAlbum = album.name;
+    if ((album.photos || 0) + (album.videos || 0) === 0) {
+      // No media, open upload directly
       mediaUploader.click();
+    } else {
+      // Has media, open album gallery page
+      window.location.href = `album_view.html?album=${encodeURIComponent(album.name)}`;
     }
-  });
-
-  return card;
+  }
+});
+return card;
 }
 
 function toggleMenu(button) {

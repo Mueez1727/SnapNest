@@ -1,24 +1,15 @@
 [
     {
-        "name": "a",
-        "photos": 1,
-        "videos": 0,
-        "latestActivity": "May 15, 2025, 11:27 PM",
-        "photoCount": 6,
-        "videoCount": 0
-    },
-    {
         "name": "aa",
-        "creationDate": "2025-05-15",
-        "photoCount": 7,
-        "videoCount": 0,
-        "latestActivity": "May 15, 2025, 11:39 PM"
-    },
-    {
-        "name": "abc",
         "creationDate": "2025-05-15",
         "photoCount": 1,
         "videoCount": 0,
-        "latestActivity": "May 15, 2025, 11:39 PM"
+        "latestActivity": "May 16, 2025, 12:07 AM"
+    },
+    {
+        "name": "aaa",
+        "creationDate": "2025-05-15",
+        "photoCount": 0,
+        "videoCount": 0
     }
 ]
