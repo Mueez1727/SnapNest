@@ -4,7 +4,14 @@
         "photos": 1,
         "videos": 0,
         "latestActivity": "2025-05-09",
-        "photoCount": 3,
+        "photoCount": 4,
         "videoCount": 0
+    },
+    {
+        "name": "aa",
+        "creationDate": "2025-05-15",
+        "photoCount": 1,
+        "videoCount": 0,
+        "latestActivity": "2025-05-15"
     }
 ]

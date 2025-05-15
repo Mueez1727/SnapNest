@@ -36,7 +36,7 @@ if (file_exists($albumsFile)) {
         if ($item['name'] === $album) {
             $item['photoCount'] += $photoCount;
             $item['videoCount'] += $videoCount;
-            $item['latestActivity'] = date('Y-m-d');
+            $latestActivity = date("F j, Y, h:i A");
             break;
         }
     }
