@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('Asia/Karachi');
+
 $album = $_POST['album'] ?? '';
 $uploadDir = '../albums/' . $album . '/';
 $albumsFile = '../data/albums.json';
@@ -9,8 +11,6 @@ if (!$album || !is_dir($uploadDir)) {
 }
 
 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/webm', 'video/ogg'];
-$photoCount = 0;
-$videoCount = 0;
 $uploadSuccess = [];
 
 foreach ($_FILES['media']['tmp_name'] as $index => $tmpPath) {
@@ -20,13 +20,39 @@ foreach ($_FILES['media']['tmp_name'] as $index => $tmpPath) {
 
     if ($error === UPLOAD_ERR_OK && in_array($type, $allowedTypes)) {
         $targetPath = $uploadDir . $name;
+
+        // Prevent duplicate overwrite
+        $i = 1;
+        $originalName = pathinfo($name, PATHINFO_FILENAME);
+        $extension = pathinfo($name, PATHINFO_EXTENSION);
+        while (file_exists($targetPath)) {
+            $name = $originalName . "_$i." . $extension;
+            $targetPath = $uploadDir . $name;
+            $i++;
+        }
+
         if (move_uploaded_file($tmpPath, $targetPath)) {
-            if (str_starts_with($type, 'image')) $photoCount++;
-            if (str_starts_with($type, 'video')) $videoCount++;
             $uploadSuccess[] = $name;
         }
     }
 }
+
+// Recount all media in album
+$photoCount = 0;
+$videoCount = 0;
+$allFiles = array_diff(scandir($uploadDir), ['.', '..']);
+$photoExts = ['jpg', 'jpeg', 'png', 'gif'];
+$videoExts = ['mp4', 'webm', 'ogg'];
+
+foreach ($allFiles as $file) {
+    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+    if (in_array($ext, $photoExts)) {
+        $photoCount++;
+    } elseif (in_array($ext, $videoExts)) {
+        $videoCount++;
+    }
+}
+
 
 // Update albums.json
 if (file_exists($albumsFile)) {
@@ -34,9 +60,9 @@ if (file_exists($albumsFile)) {
 
     foreach ($albums as &$item) {
         if ($item['name'] === $album) {
-            $item['photoCount'] += $photoCount;
-            $item['videoCount'] += $videoCount;
-            $latestActivity = date("F j, Y, h:i A");
+            $item['photoCount'] = $photoCount;
+            $item['videoCount'] = $videoCount;
+            $item['latestActivity'] = date("F j, Y, h:i A");
             break;
         }
     }
@@ -50,4 +76,3 @@ echo json_encode([
     'photoCount' => $photoCount,
     'videoCount' => $videoCount
 ]);
-?>
