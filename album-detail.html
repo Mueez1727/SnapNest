@@ -6,6 +6,8 @@
   <title>My Album</title>
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="stylesheet" href="css/album-detail.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
   <nav class="navbar">
@@ -23,6 +25,19 @@
   <!-- Where media will be shown -->
   <div id="mediaGrid" class="media-grid"></div>
 
+  <!-- Media Viewer Modal -->
+  <div id="mediaModal" class="media-modal" style="display: none;">
+    <span class="modalCloseIcon" id="modalCloseIcon" style="position:absolute; top:10px; right:10px; cursor:pointer; font-size:24px;">❌</span> <!-- close icon -->
+    <div class="modal-content">
+      <div class="modal-preview" id="modalPreview"></div>
+      <div class="modal-info">
+          <p><span>✏️</span> Add a note:</p>
+          <textarea id="mediaNote" placeholder="Write your thoughts..."></textarea>
+          <button id="saveNoteBtn" disabled style="display: none;">Done</button>
+        <button id="deleteMediaBtn">🗑️ Delete This Media</button>
+      </div>
+    </div>
+  </div>
 
   <script src="js/theme.js"></script>
   <script src="js/album-detail.js"></script>
