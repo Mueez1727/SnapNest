@@ -108,7 +108,7 @@ card.addEventListener("click", function (e) {
       mediaUploader.click();
     } else {
       // Has media, open album gallery page
-      window.location.href = `album_view.html?album=${encodeURIComponent(album.name)}`;
+      window.location.href = `album-detail.html?album=${encodeURIComponent(album.name)}`;
     }
   }
 });

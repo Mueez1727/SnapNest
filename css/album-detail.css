@@ -5,13 +5,13 @@
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg-color, #ffffff);
     color: var(--text-color, #000000);
     transition: background 0.3s, color 0.3s;
 }
-
-body.light-theme {
+  
+html.light-theme {
   --bg-color: #f7f7f7;
   --text-color: #333;
   --navbar-bg: #eaeaea;
@@ -22,8 +22,8 @@ body.light-theme {
   --popup-bg: #ffffff;
   --popup-text: #333;
 }
-
-body.dark-theme {
+  
+html.dark-theme {
   --bg-color: #1e1e1e;
   --text-color: #f7f7f7;
   --navbar-bg: #000000;
@@ -35,42 +35,42 @@ body.dark-theme {
   --popup-text: #f7f7f7;
 }
 
-/* Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 24px;
     background: var(--navbar-bg);
-    background-color: var(--navbar-bg);
     border-color: var(--border-color);
     border-bottom: 1px solid #ccc;
     transition: background 0.3s;
 }
-
+  
 body.dark-theme .navbar {
     background: #000;
     border-color: #333;
+    color: #ccc;
 }
   
 .nav-logo img {
     height: 40px;
-    cursor: pointer;    
+    cursor: pointer;
     transition: transform 0.3s;
 }
+
 
 .nav-logo img:hover {
     transform: scale(1.1);
 }
-
-.theme-toggle{
+  
+.navbar .theme-toggle{
     font-size: 20px;
     padding: 5px 10px;
     cursor: pointer;
     background: transparent;
     border: none;
 }
-
+ 
 .album-title {
     text-align: center;
     font-family: 'Segoe UI', sans-serif;
@@ -80,6 +80,10 @@ body.dark-theme .navbar {
     animation: fadeIn 0.8s ease-in-out;
   }
   
+  .album-title .dark-theme{
+    color:#ccc;
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
