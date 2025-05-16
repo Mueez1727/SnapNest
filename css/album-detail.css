@@ -80,12 +80,48 @@ body.dark-theme .navbar {
     animation: fadeIn 0.8s ease-in-out;
   }
   
-  .album-title .dark-theme{
-    color:#ccc;
-  }
+ html.dark-theme .album-title {
+  color: #f7f7f7;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.1),
+               0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
   }
   
+  .media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.media-item img,
+.media-item video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.upload-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #aaa;
+  height: 200px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #666;
+  transition: background 0.2s, color 0.2s;
+}
+
+.upload-more:hover {
+  background: #f0f0f0;
+  color: #333;
+}

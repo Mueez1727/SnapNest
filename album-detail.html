@@ -15,10 +15,14 @@
     <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">🌗</button>
  </nav>
 
-  <div class="container">
-    <h1 id="albumTitle" class="album-title">Album Name</h1>
-    <div id="mediaGrid" class="media-grid"></div>
-  </div>
+  <h1 id="albumTitle" class="album-title"></h1>
+
+  <!-- Hidden input for upload -->
+  <input type="file" id="mediaUploader" multiple accept="image/*,video/*" style="display: none;" />
+
+  <!-- Where media will be shown -->
+  <div id="mediaGrid" class="media-grid"></div>
+
 
   <script src="js/theme.js"></script>
   <script src="js/album-detail.js"></script>
