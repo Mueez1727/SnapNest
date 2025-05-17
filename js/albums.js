@@ -6,17 +6,21 @@ document.addEventListener("DOMContentLoaded", () => {
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener("click", () => {
       document.body.classList.toggle("dark-theme");
-
       const theme = document.body.classList.contains("dark-theme") ? "dark" : "light";
       localStorage.setItem("theme", theme);
     });
-  } else {
-    console.warn("Theme toggle button not found!");
   }
 
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme === "dark") {
     document.body.classList.add("dark-theme");
+  }
+
+  const sortSelect = document.getElementById("sort-albums");
+  if (sortSelect) {
+    sortSelect.addEventListener("change", () => {
+      renderAlbums(albumSearch.value.trim().toLowerCase());
+    });
   }
 
   loadAlbums();
@@ -29,10 +33,10 @@ const createAlbumCentered = document.getElementById("createAlbumCentered");
 const mediaUploader = document.getElementById("mediaUploader");
 const albumSearch = document.getElementById("albumSearch");
 
-if (albumSearch){
+if (albumSearch) {
   albumSearch.addEventListener("input", () => {
     const q = albumSearch.value.trim().toLowerCase();
-    renderAlbums(q);     // pass query to renderer
+    renderAlbums(q);
   });
 }
 
@@ -55,26 +59,35 @@ function loadAlbums() {
 function renderAlbums(query = "") {
   albumsContainer.innerHTML = "";
 
-  const list = query
-    ? albums.filter(a =>
-        a.name.toLowerCase().includes(query.trim().toLowerCase()))
-    : albums;
+  const sortBy = document.getElementById("sort-albums")?.value || "name";
+
+ let list = query
+  ? albums.filter(a => a.name.toLowerCase().includes(query))
+  : [...albums];
+
+if (sortBy === "a-z") {
+  list.sort((a, b) => a.name.localeCompare(b.name));
+} else if (sortBy === "z-a") {
+  list.sort((a, b) => b.name.localeCompare(a.name));
+} else if (sortBy === "latest") {
+  list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+} else if (sortBy === "oldest") {
+  list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+}
+
 
   const isInitialEmpty = albums.length === 0;
   const isFilteredEmpty = query && list.length === 0;
 
-  // Case: No albums at all (initial state)
   if (isInitialEmpty && !query) {
-    createAlbumCentered.style.display = "block"; // Show center button
-    addNewAlbum.style.display = "none";          // Hide box
+    createAlbumCentered.style.display = "block";
+    addNewAlbum.style.display = "none";
     return;
   }
 
-  // Case: Search yielded no matches
   if (isFilteredEmpty) {
     createAlbumCentered.style.display = "none";
     addNewAlbum.style.display = "none";
-
     const msg = document.createElement("p");
     msg.textContent = "No matching albums.";
     msg.className = "no-match";
@@ -82,7 +95,6 @@ function renderAlbums(query = "") {
     return;
   }
 
-  // Case: At least one album to show
   createAlbumCentered.style.display = "none";
   addNewAlbum.style.display = "flex";
 
@@ -108,68 +120,54 @@ function createAlbumCard(album) {
   const card = document.createElement("div");
   card.className = "album-card";
 
-  /* ---------- thumbnail ---------- */
-  // Use album.thumbnail if provided, otherwise fallback image
-  const thumbSrc   = album.thumbnail
-      ? album.thumbnail
-      : "assets/default-thumbnail.jpg";
-  const thumbExt   = thumbSrc.split(".").pop().toLowerCase();
-  const isVideo    = ["mp4","mov","avi","mkv"].includes(thumbExt);
+  const thumbSrc = album.thumbnail ? album.thumbnail : "assets/default-thumbnail.jpg";
+  const thumbExt = thumbSrc.split(".").pop().toLowerCase();
+  const isVideo = ["mp4", "mov", "avi", "mkv"].includes(thumbExt);
 
-  // Build thumbnail markup
-  const thumbHTML  = isVideo
+  const thumbHTML = isVideo
     ? `<video src="${thumbSrc}" muted autoplay loop></video>`
     : `<img src="${thumbSrc}" alt="Album Thumbnail">`;
 
   card.innerHTML = `
     <div class="album-thumbnail">
-        ${thumbHTML}
-        <div class="album-menu">
-          <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
-          <div class="menu-options" style="display:none;">
-            <button onclick="openRenameModal('${album.name}')">Rename</button>
-            <button onclick="openDeleteModal('${album.name}')">Delete</button>
-          </div>
+      ${thumbHTML}
+      <div class="album-menu">
+        <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
+        <div class="menu-options" style="display:none;">
+          <button onclick="openRenameModal('${album.name}')">Rename</button>
+          <button onclick="openDeleteModal('${album.name}')">Delete</button>
         </div>
-
-        <div class="album-footer">
-          <span class="album-name">${album.name}</span>
-          <span class="album-date">
-              ${album.latestActivity ? formatDate(album.latestActivity)
-                                     : "No activity yet"}
-          </span>
-        </div>
+      </div>
+      <div class="album-footer">
+        <span class="album-name">${album.name}</span>
+        <span class="album-date">
+          ${album.latestActivity ? formatDate(album.latestActivity) : "No activity yet"}
+        </span>
+      </div>
     </div>
-
     <div class="media-counts">
       📷 ${album.photos || 0} &nbsp;|&nbsp; 🎥 ${album.videos || 0}
     </div>
   `;
 
-  /* ---------- click handling ---------- */
   card.addEventListener("click", (e) => {
-    if (e.target.closest(".album-menu")) return;   // ignore menu clicks
+    if (e.target.closest(".album-menu")) return;
     selectedAlbum = album.name;
     const total = (album.photos || 0) + (album.videos || 0);
-
     if (total === 0) {
-      mediaUploader.click();                       // empty → upload dialog
+      mediaUploader.click();
     } else {
-      window.location.href =
-        `album-detail.html?album=${encodeURIComponent(album.name)}`;
+      window.location.href = `album-detail.html?album=${encodeURIComponent(album.name)}`;
     }
   });
 
   return card;
 }
 
-
 function toggleMenu(button) {
   const menu = button.nextElementSibling;
   const allMenus = document.querySelectorAll(".menu-options");
-  allMenus.forEach((m) => {
-    if (m !== menu) m.style.display = "none";
-  });
+  allMenus.forEach(m => { if (m !== menu) m.style.display = "none"; });
   menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
 
@@ -196,12 +194,10 @@ function submitRename() {
 
   fetch("php/rename_album.php", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ oldName: selectedAlbum, newName }),
   })
-    .then((response) => response.json())
+    .then((res) => res.json())
     .then((data) => {
       hideSpinner("rename");
       if (data.success) {
@@ -221,12 +217,10 @@ function confirmDelete() {
   showSpinner("delete");
   fetch("php/delete_album.php", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: selectedAlbum }),
   })
-    .then((response) => response.json())
+    .then((res) => res.json())
     .then((data) => {
       hideSpinner("delete");
       if (data.success) {
@@ -254,16 +248,15 @@ function submitNewAlbum() {
     Swal.fire("Please enter album name");
     return;
   }
+
   showSpinner("create");
 
   fetch("php/save_album.php", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: albumName }),
   })
-    .then((response) => response.json())
+    .then((res) => res.json())
     .then((data) => {
       hideSpinner("create");
       if (data.success) {
@@ -273,28 +266,26 @@ function submitNewAlbum() {
         Swal.fire("Album already exists!");
       }
     })
-    .catch((error) => {
+    .catch((err) => {
       hideSpinner("create");
-      console.error("Error saving album:", error);
+      console.error("Error saving album:", err);
     });
 }
 
-mediaUploader.addEventListener("change", function () {
+mediaUploader.addEventListener("change", () => {
   const files = Array.from(mediaUploader.files);
   if (files.length === 0) return;
 
   const formData = new FormData();
   formData.append("album", selectedAlbum);
-  files.forEach((file) => {
-    formData.append("media[]", file);
-  });
+  files.forEach(file => formData.append("media[]", file));
 
   fetch("php/upload_media.php", {
     method: "POST",
     body: formData,
   })
-    .then((response) => response.json())
-    .then((data) => {
+    .then(res => res.json())
+    .then(data => {
       if (data.success) {
         Swal.fire("Uploaded successfully!");
         loadAlbums();
@@ -302,7 +293,7 @@ mediaUploader.addEventListener("change", function () {
         Swal.fire("Upload failed.");
       }
     })
-    .catch((error) => console.error("Error uploading media:", error));
+    .catch(err => console.error("Error uploading media:", err));
 });
 
 function showSpinner(modalId) {

@@ -1,25 +1,9 @@
 [
     {
-        "name": "abc",
+        "name": "acx",
         "creationDate": "2025-05-17",
-        "photoCount": 2,
+        "photoCount": 1,
         "videoCount": 1,
-        "latestActivity": "May 17, 2025, 10:03 PM"
-    },
-    {
-        "name": "xyz",
-        "creationDate": "2025-05-17",
-        "photoCount": 3,
-        "videoCount": 0,
-        "latestActivity": "May 17, 2025, 10:05 PM",
-        "photos": 3,
-        "videos": 1
-    },
-    {
-        "name": "isha",
-        "creationDate": "2025-05-17",
-        "photoCount": 3,
-        "videoCount": 0,
-        "latestActivity": "May 17, 2025, 10:06 PM"
+        "latestActivity": "May 17, 2025, 11:02 PM"
     }
 ]
