@@ -55,30 +55,36 @@ function loadAlbums() {
 function renderAlbums(query = "") {
   albumsContainer.innerHTML = "";
 
-  // choose list: all albums or only those matching the query
   const list = query
-      ? albums.filter(a =>
-          a.name.toLowerCase().includes(query.trim().toLowerCase()))
-      : albums;
+    ? albums.filter(a =>
+        a.name.toLowerCase().includes(query.trim().toLowerCase()))
+    : albums;
 
-  /* ----- empty states ----- */
-  if (list.length === 0) {
-    createAlbumCentered.style.display = query ? "none" : "block";
-    addNewAlbum.style.display         = query ? "none" : "flex";
+  const isInitialEmpty = albums.length === 0;
+  const isFilteredEmpty = query && list.length === 0;
 
-    if (query) {
-      const msg = document.createElement("p");
-      msg.textContent = "No matching albums.";
-      msg.className   = "no-match";
-      albumsContainer.appendChild(msg);
-    }
-    albumsContainer.appendChild(addNewAlbum);
+  // Case: No albums at all (initial state)
+  if (isInitialEmpty && !query) {
+    createAlbumCentered.style.display = "block"; // Show center button
+    addNewAlbum.style.display = "none";          // Hide box
     return;
   }
 
-  /* ----- show albums ----- */
+  // Case: Search yielded no matches
+  if (isFilteredEmpty) {
+    createAlbumCentered.style.display = "none";
+    addNewAlbum.style.display = "none";
+
+    const msg = document.createElement("p");
+    msg.textContent = "No matching albums.";
+    msg.className = "no-match";
+    albumsContainer.appendChild(msg);
+    return;
+  }
+
+  // Case: At least one album to show
   createAlbumCentered.style.display = "none";
-  addNewAlbum.style.display         = "flex";
+  addNewAlbum.style.display = "flex";
 
   list.forEach(album => {
     albumsContainer.appendChild(createAlbumCard(album));
