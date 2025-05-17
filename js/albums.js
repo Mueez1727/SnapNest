@@ -27,6 +27,14 @@ const createAlbumBtn = document.getElementById("createAlbumBtn");
 const addNewAlbum = document.getElementById("addNewAlbum");
 const createAlbumCentered = document.getElementById("createAlbumCentered");
 const mediaUploader = document.getElementById("mediaUploader");
+const albumSearch = document.getElementById("albumSearch");
+
+if (albumSearch){
+  albumSearch.addEventListener("input", () => {
+    const q = albumSearch.value.trim().toLowerCase();
+    renderAlbums(q);     // pass query to renderer
+  });
+}
 
 let albums = [];
 let selectedAlbum = null;
@@ -44,21 +52,36 @@ function loadAlbums() {
     .catch((error) => console.error("Error loading albums:", error));
 }
 
-function renderAlbums() {
+function renderAlbums(query = "") {
   albumsContainer.innerHTML = "";
 
-  if (albums.length === 0) {
-    createAlbumCentered.style.display = "block";
-    addNewAlbum.style.display = "none";
+  // choose list: all albums or only those matching the query
+  const list = query
+      ? albums.filter(a =>
+          a.name.toLowerCase().includes(query.trim().toLowerCase()))
+      : albums;
+
+  /* ----- empty states ----- */
+  if (list.length === 0) {
+    createAlbumCentered.style.display = query ? "none" : "block";
+    addNewAlbum.style.display         = query ? "none" : "flex";
+
+    if (query) {
+      const msg = document.createElement("p");
+      msg.textContent = "No matching albums.";
+      msg.className   = "no-match";
+      albumsContainer.appendChild(msg);
+    }
+    albumsContainer.appendChild(addNewAlbum);
     return;
-  } else {
-    createAlbumCentered.style.display = "none";
-    addNewAlbum.style.display = "flex";
   }
 
-  albums.forEach((album) => {
-    const albumCard = createAlbumCard(album);
-    albumsContainer.appendChild(albumCard);
+  /* ----- show albums ----- */
+  createAlbumCentered.style.display = "none";
+  addNewAlbum.style.display         = "flex";
+
+  list.forEach(album => {
+    albumsContainer.appendChild(createAlbumCard(album));
   });
 
   albumsContainer.appendChild(addNewAlbum);

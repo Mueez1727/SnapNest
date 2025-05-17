@@ -20,22 +20,31 @@
     <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">🌗</button>
  </nav>
 
-<center><h1 class="albums-heading">My Albums</h1></center>
+  <center><h1 class="albums-heading">My Albums</h1></center>
 
-<main>
-  <div class="sort-controls">
-    <label for="sort-albums">Sort by:</label>
-    <select id="sort-albums">
-      <option value="name">Name (A-Z)</option>
-      <option value="date">Creation Date (Newest First)</option>
-      <option value="activity">Latest Activity</option>
-    </select>
+  <div class="album-search-wrapper">
+    <input
+      type="text"
+      id="albumSearch"
+      placeholder="Search albums..."
+      autocomplete="off" />
+    <span class="search-emoji">🔍</span>
   </div>
+
+  <main>
+    <div class="sort-controls">
+      <label for="sort-albums">Sort by:</label>
+      <select id="sort-albums">
+        <option value="name">Name (A-Z)</option>
+        <option value="date">Creation Date (Newest First)</option>
+        <option value="activity">Latest Activity</option>
+      </select>
+    </div>
   
-  <!-- No Albums Message -->
-  <div id="noAlbumsMsg" style="display: none; text-align: center; margin-top: 20px;">
-    <h2>No albums yet. Create one!</h2>
-  </div>
+    <!-- No Albums Message -->
+    <div id="noAlbumsMsg" style="display: none; text-align: center; margin-top: 20px;">
+      <h2>No albums yet. Create one!</h2>
+    </div>
 
     <!-- Albums Grid -->
     <div class="albums-container" id="albumsContainer">

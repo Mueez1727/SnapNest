@@ -77,6 +77,66 @@ body.dark-theme .navbar {
     font-weight: bold;
 }
   
+/* search bar container */
+.album-search-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 10px;
+  position: relative;
+}
+
+/* input styling */
+#albumSearch{
+  width: 320px;
+  max-width: 80%;
+  padding: 10px 44px 10px 18px;     /* right space for emoji */
+  border: 2px solid var(--border-color,#6c63ff);
+  border-radius: 40px;
+  font-size: 15px;
+  outline: none;
+  transition: box-shadow .3s ease, transform .3s ease;
+  background: var(--card-bg,#fff);
+  color: var(--text-color,#333);
+}
+
+/* emoji icon */
+.search-emoji{
+  position: absolute;
+  right: calc(50% - 160px);         /* centers relative to input width (320/2) */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 20px;
+  transition: color .3s ease;
+}
+
+/* focus effects */
+#albumSearch:focus{
+  box-shadow: 0 4px 15px rgba(108,99,255,.35);
+  transform: scale(1.03);
+}
+#albumSearch:focus + .search-emoji{
+  color: #6c63ff;
+}
+
+/* subtle hover */
+#albumSearch:hover{
+  box-shadow: 0 2px 8px rgba(108,99,255,.25);
+}
+
+/* dark‑theme tweaks */
+html.dark-theme #albumSearch{
+  background:#2a2a2a;
+  color:#f7f7f7;
+  border-color:#8b78f4;
+}
+html.dark-theme .search-emoji{color:#ccc;}
+html.dark-theme #albumSearch:focus{
+  box-shadow:0 4px 15px rgba(139,120,244,.4);
+}
+
+
 #createAlbumCentered {
   display: flex;
   justify-content: center;
@@ -116,17 +176,17 @@ body.dark-theme .navbar {
   display: block;
 }
   
-  .create-button {
-    padding: 20px 40px;
-    font-size: 20px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    color: #333;
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s, background 0.3s;
-  }
+.create-button {
+  padding: 20px 40px;
+  font-size: 20px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, background 0.3s;
+}
   
   .create-button:hover {
     transform: scale(1.1);
