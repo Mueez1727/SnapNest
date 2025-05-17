@@ -78,42 +78,62 @@ function formatDate(datetimeString) {
 function createAlbumCard(album) {
   const card = document.createElement("div");
   card.className = "album-card";
+
+  /* ---------- thumbnail ---------- */
+  // Use album.thumbnail if provided, otherwise fallback image
+  const thumbSrc   = album.thumbnail
+      ? album.thumbnail
+      : "assets/default-thumbnail.jpg";
+  const thumbExt   = thumbSrc.split(".").pop().toLowerCase();
+  const isVideo    = ["mp4","mov","avi","mkv"].includes(thumbExt);
+
+  // Build thumbnail markup
+  const thumbHTML  = isVideo
+    ? `<video src="${thumbSrc}" muted autoplay loop></video>`
+    : `<img src="${thumbSrc}" alt="Album Thumbnail">`;
+
   card.innerHTML = `
     <div class="album-thumbnail">
-      <img src="assets/default-thumbnail.jpg" alt="Album Thumbnail">
-      
-      <div class="album-menu">
-        <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
-        <div class="menu-options" style="display: none;">
-          <button onclick="openRenameModal('${album.name}')">Rename</button>
-          <button onclick="openDeleteModal('${album.name}')">Delete</button>
+        ${thumbHTML}
+        <div class="album-menu">
+          <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
+          <div class="menu-options" style="display:none;">
+            <button onclick="openRenameModal('${album.name}')">Rename</button>
+            <button onclick="openDeleteModal('${album.name}')">Delete</button>
+          </div>
         </div>
-      </div>
-      
-      <div class="album-footer">
-        <span class="album-name">${album.name}</span>
-        <span class="album-date">${album.latestActivity ? formatDate(album.latestActivity) : 'No activity yet'}</span>
-      </div>
+
+        <div class="album-footer">
+          <span class="album-name">${album.name}</span>
+          <span class="album-date">
+              ${album.latestActivity ? formatDate(album.latestActivity)
+                                     : "No activity yet"}
+          </span>
+        </div>
     </div>
 
-    <div class="media-counts">📷 ${album.photos || 0} | 🎥 ${album.videos || 0}</div>
+    <div class="media-counts">
+      📷 ${album.photos || 0} &nbsp;|&nbsp; 🎥 ${album.videos || 0}
+    </div>
   `;
 
-card.addEventListener("click", function (e) {
-  console.log('Rendering album:', album.name, 'Photos:', album.photos, 'Videos:', album.videos);
-  if (!e.target.closest(".album-menu")) {
+  /* ---------- click handling ---------- */
+  card.addEventListener("click", (e) => {
+    if (e.target.closest(".album-menu")) return;   // ignore menu clicks
     selectedAlbum = album.name;
-    if ((album.photos || 0) + (album.videos || 0) === 0) {
-      // No media, open upload directly
-      mediaUploader.click();
+    const total = (album.photos || 0) + (album.videos || 0);
+
+    if (total === 0) {
+      mediaUploader.click();                       // empty → upload dialog
     } else {
-      // Has media, open album gallery page
-      window.location.href = `album-detail.html?album=${encodeURIComponent(album.name)}`;
+      window.location.href =
+        `album-detail.html?album=${encodeURIComponent(album.name)}`;
     }
-  }
-});
-return card;
+  });
+
+  return card;
 }
+
 
 function toggleMenu(button) {
   const menu = button.nextElementSibling;
