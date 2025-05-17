@@ -5,6 +5,7 @@ $album = $_POST['album'] ?? '';
 $album = basename($album); // Prevent directory traversal
 $uploadDir = '../albums/' . $album . '/';
 $albumsFile = '../data/albums.json';
+$targetDir = "../albums/" . $album . "/";
 
 if (!$album || !is_dir($uploadDir)) {
     echo json_encode(['success' => false, 'message' => 'Invalid album name or folder missing']);

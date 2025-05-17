@@ -20,7 +20,9 @@
   <h1 id="albumTitle" class="album-title"></h1>
 
   <!-- Hidden input for upload -->
-  <input type="file" id="mediaUploader" multiple accept="image/*,video/*" style="display: none;" />
+  <input type="file" id="mediaUploader"  accept="image/*,video/*" multiple style="display: none;">
+  <progress id="uploadProgress" max="100" value="0" style="display:none; width: 100%; margin-top: 10px;"></progress>
+ 
 
   <!-- Where media will be shown -->
   <div id="mediaGrid" class="media-grid"></div>
