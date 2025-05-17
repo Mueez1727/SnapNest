@@ -234,3 +234,7 @@ body.dark-theme .navbar {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.swal2-container {
+  z-index: 10000 !important;
+}
