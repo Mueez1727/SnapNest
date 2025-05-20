@@ -2,7 +2,8 @@
     {
         "name": "xyz",
         "creationDate": "2025-05-20",
-        "photoCount": 0,
-        "videoCount": 0
+        "photoCount": 3,
+        "videoCount": 0,
+        "latestActivity": "May 20, 2025, 11:30 PM"
     }
 ]
