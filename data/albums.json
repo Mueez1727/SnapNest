@@ -2,7 +2,8 @@
     {
         "name": "789",
         "creationDate": "2025-06-01",
-        "photoCount": 0,
-        "videoCount": 0
+        "photoCount": 1,
+        "videoCount": 0,
+        "latestActivity": "June 4, 2025, 11:50 PM"
     }
 ]
