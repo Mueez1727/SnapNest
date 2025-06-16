@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "name": "rahat",
+        "creationDate": "2025-06-16",
+        "photoCount": 2,
+        "videoCount": 1,
+        "latestActivity": "June 16, 2025, 09:28 PM"
+    },
+    {
+        "name": "123",
+        "creationDate": "2025-06-16",
+        "photoCount": 3,
+        "videoCount": 0,
+        "latestActivity": "June 16, 2025, 09:29 PM"
+    }
+]
