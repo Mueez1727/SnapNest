@@ -116,6 +116,12 @@ function formatDate(datetimeString) {
   });
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(String(str)));
+  return div.innerHTML;
+}
+
 function createAlbumCard(album) {
   const card = document.createElement("div");
   card.className = "album-card";
@@ -134,12 +140,12 @@ function createAlbumCard(album) {
       <div class="album-menu">
         <button class="menu-btn" onclick="toggleMenu(this)">⋮</button>
         <div class="menu-options" style="display:none;">
-          <button onclick="openRenameModal('${album.name}')">Rename</button>
-          <button onclick="openDeleteModal('${album.name}')">Delete</button>
+          <button class="rename-btn">Rename</button>
+          <button class="delete-btn">Delete</button>
         </div>
       </div>
       <div class="album-footer">
-        <span class="album-name">${album.name}</span>
+        <span class="album-name">${escapeHtml(album.name)}</span>
         <span class="album-date">
           ${album.latestActivity ? formatDate(album.latestActivity) : "No activity yet"}
         </span>
@@ -149,6 +155,9 @@ function createAlbumCard(album) {
       📷 ${album.photos || 0} &nbsp;|&nbsp; 🎥 ${album.videos || 0}
     </div>
   `;
+
+  card.querySelector('.rename-btn').addEventListener('click', () => openRenameModal(album.name));
+  card.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal(album.name));
 
   card.addEventListener("click", (e) => {
     if (e.target.closest(".album-menu")) return;

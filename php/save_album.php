@@ -1,7 +1,9 @@
 <?php
+header('Content-Type: application/json');
+
 // Read and decode input JSON
 $input = json_decode(file_get_contents("php://input"), true);
-$name = trim($input['name']);
+$name = basename(trim($input['name'] ?? ''));
 
 $albumsFile = '../data/albums.json';
 $albumsFolder = '../albums/';

@@ -20,9 +20,15 @@ if (!isset($_FILES['media'])) {
     exit;
 }
 
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+if (!$finfo) {
+    echo json_encode(['success' => false, 'message' => 'Server error: unable to detect file type']);
+    exit;
+}
+
 foreach ($_FILES['media']['tmp_name'] as $index => $tmpPath) {
     $originalName = basename($_FILES['media']['name'][$index]);
-    $type = $_FILES['media']['type'][$index];
+    $type = finfo_file($finfo, $tmpPath);
     $error = $_FILES['media']['error'][$index];
 
     if ($error === UPLOAD_ERR_OK && in_array($type, $allowedTypes)) {
@@ -44,6 +50,8 @@ foreach ($_FILES['media']['tmp_name'] as $index => $tmpPath) {
         }
     }
 }
+
+finfo_close($finfo);
 
 // Recount all media in the album
 $photoCount = 0;
