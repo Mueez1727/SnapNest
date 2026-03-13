@@ -1,0 +1,6 @@
+{
+    "github.copilot.chat.defaultModel": "claude-sonnet-4-5",
+    "github.copilot.enable": {
+        "*": true
+    }
+}
